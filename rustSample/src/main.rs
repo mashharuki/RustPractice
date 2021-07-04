@@ -1,3 +1,19 @@
+// Eqを実装する。
+#[derive(Eq, PartialEq)]
+struct A(i32);
+// PartialOrdを実装するためにPartialEqが必要
+#[derive(PartialEq, PartialOrd)]
+struct B(f32);
+// Copyを実装するためにCloneを実装する。
+#[derive(Copy, Clone)]
+struct C;
+#[derive(Clone)]
+struct D;
+#[derive(Debug)]
+struct E;
+#[derive(Default)]
+struct F;
+
 /**
  * メイン関数
  */ 
@@ -91,6 +107,21 @@ fn main() {
     debug_assert_eq!(1, 1);
     assert_ne!(1, 0);
     debug_assert_ne!(1, 0);
+    // Aは、一致比較可能
+    println!("{:?}", A(0) == A(1));
+    // Bは、大小比較可能
+    println!("{:?}", B(1.0) > B(0.0));
+    // Cは、ムーブではなくコピーされる
+    let c0 = c;
+    let _c1 = c0;
+    // let _c2 = c0;
+    // Dは、clone可能
+    let d0 = D;
+    let _d1 = d0.clone();
+    // Eは、デバックプリント可能
+    println!("{:?}", E);
+    // Fは、default可能
+    let _f = F::default();
 }
 
 struct Iter {
