@@ -49,6 +49,17 @@ fn main() {
     for element in &v1 {
         print!("{}", element);
     }
+    // Boxの例
+     let byte_array = [b'h', b'e', b'l', b'l', b'o'];
+    // print関数を呼ぶ
+    print(Box::new(byte_array));
+}
+
+/**
+ * print関数
+ */
+fn print (s: Box<[u8]>) {
+    println!("{:?}", s);
 }
 
 /*
