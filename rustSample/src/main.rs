@@ -77,6 +77,11 @@ fn main() {
     for num in it {
         println!("{}", num);
     }
+    // プログラム外のリソースにアクセスするマクロ
+    println!("definded in file: {}", file!());
+    println!("definded on line: {}", line!());
+    println!("is test: {}", cfg!(unix));
+    println!("CARGO_HOME: {}", env!("CARGO_HOME"));
 }
 
 struct Iter {
