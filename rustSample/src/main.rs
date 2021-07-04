@@ -40,8 +40,18 @@ fn main() {
         None,
         Some(T)
     }
+    // ベクタ型の例
+    let v1 = vec![1, 2, 3, 4, 5];
+    // 0を5つ埋めて初期化する。
+    let v2 = vec![0; 5];
+    print!("{}", v1[0]);
+    // すべての要素を出力させる。
+    for element in &v1 {
+        print!("{}", element);
+    }
 }
 
+/*
 // Resultの例(処理結果を表す変数)
 fn result() {
     pub enum Result<i32, String> {
@@ -73,4 +83,4 @@ fn func (code: i32) -> Result<i32, String> {
     print!("code: {}", code);
     Ok(100);
 }
-
+ */
