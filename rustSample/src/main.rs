@@ -13,6 +13,8 @@ struct D;
 struct E;
 #[derive(Default)]
 struct F;
+// スレッドライブラリをインポートする。
+use std::thread;
 
 /**
  * メイン関数
@@ -122,6 +124,16 @@ fn main() {
     println!("{:?}", E);
     // Fは、default可能
     let _f = F::default();
+    // ジェネリクスの実装例
+    let t1 = make_tuple(1, 2);
+    let t2 = make_tuple("Hello", "World!");
+    let t3 = make_tuple(vec![1, 2, 3], vec![4, 5, 6]);
+    let t4 = make_tuple(3, "years old ");
+    // Droppable型の変数を定義する。
+    {
+        let d = Droppable;
+    }
+    println!("The Droppable should be released at the end of block.");
 }
 
 struct Iter {
@@ -129,11 +141,20 @@ struct Iter {
     max: usize,
 }
 
+struct Droppable;
+
 /**
  * print関数
  */
 fn print (s: Box<[u8]>) {
     println!("{:?}", s);
+}
+
+/**
+ * ジェネリクス用の関数
+ */
+fn make_tuple<T, S> (t:T, s:S) -> (T, S) {
+    (t, s)
 }
 
 /**
@@ -151,6 +172,15 @@ impl Iterator for Iter {
         } else {
             None
         }
+    }
+}
+
+/**
+ * Dropトレイトを適用させる。
+ */
+impl Drop for Droppable {
+    fn drop(&mut self) {
+        println!("Resource will be released!");
     }
 }
 
