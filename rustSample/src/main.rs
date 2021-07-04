@@ -15,6 +15,10 @@ struct E;
 struct F;
 // スレッドライブラリをインポートする。
 use std::thread;
+// Rcライブラリをインポートする。(シングルスレッド用)
+use std::rc::Rc;
+// Arcライブラリをインポートする。(マルチスレッド用)
+use std::sync::{Arc, Mutex};
 
 /**
  * メイン関数
@@ -134,19 +138,27 @@ fn main() {
         let d = Droppable;
     }
     println!("The Droppable should be released at the end of block.");
+
+    // 以下、スレッドプログラミングの例
     // Vec型の変数を用意する。
     let mut handles = Vec::new();
+    // vec型の変数を用意する。
+    let mut data = Arc::new(Mutex::new(vec![1; 10]));
     // 10回ループする。
     for x in 0..10 {
+        let data_ref = data.clone();
         // スレッドを10個生成する。
         handles.push(thread::spawn(move || {
-            println!("Hello, world! :{}", x);
+            // lockを使ってdataへの可変参照を得る(排他的制御のため)
+            let mut data = data_ref.lock().unwrap();
+            data[x] += 1;
         }));
     }
     // 各スレッドの終了を待つ
     for handle in handles {
         let _ = handle.join();
     }
+    dbg!(data);
 }
 
 struct Iter {
