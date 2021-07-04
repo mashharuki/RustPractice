@@ -53,6 +53,20 @@ fn main() {
      let byte_array = [b'h', b'e', b'l', b'l', b'o'];
     // print関数を呼ぶ
     print(Box::new(byte_array));
+    // 以下、matchの例
+    enum Color {
+        Red,
+        Blue,
+        Green,
+    }
+
+    let c = Color::Red;
+    // match文
+    match c {
+        Color::Red => println!("Red"),
+        Color::Blue => println!("Blue"), 
+        Color::Green => println!("Green"), 
+    }
 }
 
 /**
