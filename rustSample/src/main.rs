@@ -134,12 +134,19 @@ fn main() {
         let d = Droppable;
     }
     println!("The Droppable should be released at the end of block.");
-    // スレッドを生成する。
-    let handle = thread::spawn(|| {
-        println!("Hello, world!");
-    });
-    // スレッドを終了待つ
-    dbg!(handle.join());
+    // Vec型の変数を用意する。
+    let mut handles = Vec::new();
+    // 10回ループする。
+    for x in 0..10 {
+        // スレッドを10個生成する。
+        handles.push(thread::spawn(move || {
+            println!("Hello, world! :{}", x);
+        }));
+    }
+    // 各スレッドの終了を待つ
+    for handle in handles {
+        let _ = handle.join();
+    }
 }
 
 struct Iter {
