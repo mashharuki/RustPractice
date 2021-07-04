@@ -67,6 +67,21 @@ fn main() {
         Color::Blue => println!("Blue"), 
         Color::Green => println!("Green"), 
     }
+    // Iteratorの例
+    // Iter型の変数を用意する。
+    let it = Iter {
+        current: 0,
+        max: 10,
+    };
+    // ループ文
+    for num in it {
+        println!("{}", num);
+    }
+}
+
+struct Iter {
+    current: usize,
+    max: usize,
 }
 
 /**
@@ -74,6 +89,24 @@ fn main() {
  */
 fn print (s: Box<[u8]>) {
     println!("{:?}", s);
+}
+
+/**
+ * Iteratorトレイトを適用させる。
+ */
+impl Iterator for Iter {
+    // 出力する型の紐付けをする。
+    type Item = usize;
+    // next()メソッドを実装する。
+    fn next(&mut self) -> Option<usize> {
+        self.current += 1;
+        // 条件分岐
+        if self.current - 1 < self.max {
+            Some(self.current - 1)
+        } else {
+            None
+        }
+    }
 }
 
 /*
