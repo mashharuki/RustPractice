@@ -134,6 +134,12 @@ fn main() {
         let d = Droppable;
     }
     println!("The Droppable should be released at the end of block.");
+    // スレッドを生成する。
+    let handle = thread::spawn(|| {
+        println!("Hello, world!");
+    });
+    // スレッドを終了待つ
+    dbg!(handle.join());
 }
 
 struct Iter {
