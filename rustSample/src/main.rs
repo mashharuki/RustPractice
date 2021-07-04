@@ -1,4 +1,6 @@
-// メイン関数
+/**
+ * メイン関数
+ */ 
 fn main() {
     println!("Hello, world!");
     // 文字列の例
@@ -82,6 +84,13 @@ fn main() {
     println!("definded on line: {}", line!());
     println!("is test: {}", cfg!(unix));
     println!("CARGO_HOME: {}", env!("CARGO_HOME"));
+    // アサーション用のマクロ (cargo run --releaseで実行しないとエラーになる。)
+    assert!(true);
+    debug_assert!(false);
+    assert_eq!(1, 1);
+    debug_assert_eq!(1, 1);
+    assert_ne!(1, 0);
+    debug_assert_ne!(1, 0);
 }
 
 struct Iter {
