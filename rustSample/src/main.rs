@@ -19,6 +19,7 @@ use std::thread;
 use std::rc::Rc;
 // Arcライブラリをインポートする。(マルチスレッド用)
 use std::sync::{Arc, Mutex};
+use std::sync::mpsc;
 
 /**
  * メイン関数
@@ -153,6 +154,44 @@ fn main() {
             let mut data = data_ref.lock().unwrap();
             data[x] += 1;
         }));
+    }
+    // 各スレッドの終了を待つ
+    for handle in handles {
+        let _ = handle.join();
+    }
+    dbg!(data);
+
+    // メッセージパッシング
+    // 各種変数を用意する。
+    let mut handles = Vec::new();
+    let mut data = vec![1; 10];
+    let mut snd_channels = Vec::new();
+    let mut rcv_channels = Vec::new();
+    // 10回ループする。
+    for _ in 0..10 {
+        // mainから各スレッドへの通信用のチャンネル変数
+        let (snd_tx, snd_rx) = mpsc::channel();
+        // 各スレッドからmainへの通信用のチャンネル変数
+        let (rcv_tx, rcv_rx) = mpsc::channel();
+        snd_channels.push(snd_tx);
+        rcv_channels.push(rcv_tx);
+        // スレッドを10個生成する。
+        handles.push(thread::spawn(move || {
+            // lockを使ってdataへの可変参照を得る(排他的制御のため)
+            let mut data = snd_rx.recv().unwrap();
+            data += 1;
+            let _ = rcv_tx.send(data);
+        }));
+    }
+    
+    // 各スレッドにdataの値を送信する。
+    for x in 0..10 {
+        let _ = snd_channels[x].send(data[x]);
+    }
+
+    // 各スレッドからの結果をdataに格納する。
+    for x in 0..10 {
+        data[x] = rcv_channels[x].recv().unwrap();
     }
     // 各スレッドの終了を待つ
     for handle in handles {
